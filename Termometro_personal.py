@@ -45,19 +45,25 @@ c = tinytuya.Cloud(
 
 # Paso 3: Obtener el estado del dispositivo
 device_status = c.getstatus(DEVICE_ID)
-arbol = device_status["result"]
 
-# Paso 4: Procesar y mostrar los datos relevantes
-for hojas in arbol:
-    if hojas["code"] == "va_temperature":
-        temperatura = hojas["value"] / 10
-        print(f"La temperatura es de {temperatura} grados")
-    elif hojas["code"] == "va_humidity":
-        humedad = hojas["value"]
-        print(f"La humedad es {humedad} %")
-    elif hojas["code"] == "battery_percentage":
-        bateria = hojas["value"]
-        print(f"El porcentaje de batería es {bateria} %")
+if device_status.get("success"):
+    arbol = device_status["result"]
+
+    # Paso 4: Procesar y mostrar los datos relevantes
+    for hojas in arbol:
+        if hojas["code"] == "va_temperature":
+            temperatura = hojas["value"] / 10
+            print(f"La temperatura es de {temperatura} grados")
+        elif hojas["code"] == "va_humidity":
+            humedad = hojas["value"]
+            print(f"La humedad es {humedad} %")
+        elif hojas["code"] == "battery_percentage":
+            bateria = hojas["value"]
+            print(f"El porcentaje de batería es {bateria} %")
+else:
+    print(f"Error al obtener datos: {device_status.get('msg')}")
+
+
 
 # Paso 5: Esperar antes de cerrar
 input("Presiona Enter para salir...")
